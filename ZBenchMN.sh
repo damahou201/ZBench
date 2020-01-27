@@ -6,24 +6,24 @@ if  [ ! -e '/usr/bin/wget' ]; then
     echo "Error: wget command not found. You must be install wget command at first."
     exit 1
 fi
-read -p "??¤J§AªºªA?¾¹´£¨Ñ°Ó: " Provider
+read -p "è¯·è¾“å…¥ä½ çš„æœåŠ¡å™¨æä¾›å•†: " Provider
 
 
 # Get IP
 OwnerIP=$(who am i | awk '{print $NF}' | sed -e 's/[()]//g')
 while :; do echo
-  read -p "?ÚÌ?§A©Ò¦b¦aªºIP:${OwnerIP} [y/n]: " ifOwnerIP
+  read -p "è¯·ç¡®è®¤ä½ æ‰€åœ¨åœ°çš„IP:${OwnerIP} [y/n]: " ifOwnerIP
   if [[ ! ${ifOwnerIP} =~ ^[y,n]$ ]]; then
-    echo "?¤J??! ?ÚÌ«O§A?¤Jªº¬O 'y' ©ÎªÌ 'n'"
+    echo "è¾“å…¥é”™è¯¯! è¯·ç¡®ä¿ä½ è¾“å…¥çš„æ˜¯ 'y' æˆ–è€… 'n'"
   else
     break
   fi
 done
 if [[ ${ifOwnerIP} == "n" ]]; then
   while :; do echo
-    read -p "??¤J§A©Ò¦b¦aªºIP: " OwnerIP
+    read -p "è¯·è¾“å…¥ä½ æ‰€åœ¨åœ°çš„IP: " OwnerIP
     if [[ ! ${OwnerIP} ]]; then
-      echo "?¤J??!IP¦a§}¤£¯à?ªÅ¡I"
+      echo "è¾“å…¥é”™è¯¯!IPåœ°å€ä¸èƒ½ä¸ºç©ºï¼"
     else
       break
     fi
@@ -58,7 +58,7 @@ PLAIN='\033[0m'
 
 rm -rf /tmp/report && mkdir /tmp/report
 
-echo "¥¿¦b¦w?¥²­nªº¨Ì?¡A?­@¤ßµ¥«İ..."
+echo "æ­£åœ¨å®‰è£…å¿…è¦çš„ä¾èµ–ï¼Œè¯·è€å¿ƒç­‰å¾…..."
 
 
 
@@ -168,13 +168,11 @@ speed_test() {
     local nodeName=$2
     local latency=$(ping $ipaddress -c 3 | grep avg | awk -F / '{print $5}')" ms"
     printf "${YELLOW}%-26s${GREEN}%-18s${RED}%-20s${SKYBLUE}%-12s${PLAIN}\n" "${nodeName}" "${ipaddress}" "${speedtest}" "${latency}"
-
     #Record Speed Data
     echo ${ipaddress} >> /tmp/speed.txt
     echo ${speedtest} >> /tmp/speed.txt
     echo ${latency} >> /tmp/speed.txt
 }
-
 speed() {
     speed_test 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
     speed_test 'http://speedtest.tokyo2.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
@@ -195,7 +193,6 @@ speed() {
     speed_test 'http://lg-ro.vps2day.com/100MB.test' 'VPS2day, Bucharest, RO'
     speed_test 'https://bg.edis.at/100MB.test' 'EDIS, Sofia, BG'
 }
-
 speed_test_cn(){
     if [[ $1 == '' ]]; then
         temp=$(python /tmp/speedtest.py --share 2>&1)
@@ -205,7 +202,6 @@ speed_test_cn(){
             local reupload=$(echo "$temp" | awk -F ':' '/Upload/{print $2}')
             local relatency=$(echo "$temp" | awk -F ':' '/Hosted/{print $2}')
             local nodeName=$2
-
             printf "${YELLOW}%-29s${GREEN}%-18s${RED}%-20s${SKYBLUE}%-12s${PLAIN}\n" "${nodeName}" "${reupload}" "${REDownload}" "${relatency}"
         else
             local cerror="ERROR"
@@ -222,39 +218,31 @@ speed_test_cn(){
                 relatency=" 000.000 ms"
             fi
             local nodeName=$2
-
             printf "${YELLOW}%-29s${GREEN}%-18s${RED}%-20s${SKYBLUE}%-12s${PLAIN}\n" "${nodeName}" "${reupload}" "${REDownload}" "${relatency}"
         else
             local cerror="ERROR"
         fi
     fi
-
     #Record Speed_cn Data
     echo ${reupload} >> /tmp/speed_cn.txt
     echo ${REDownload} >> /tmp/speed_cn.txt
     echo ${relatency} >> /tmp/speed_cn.txt
 }
-
 speed_cn() {
-
-    speed_test_cn '12637' 'Á¸??«H'
-    speed_test_cn '3633' '¤W®ü?«H'
-    speed_test_cn '4624' '¦¨³£?«H'
-    speed_test_cn '4863' "¦è¦w?«H"
-    speed_test_cn '5083' '¤W®ü?³q'
-    speed_test_cn '5726' '­«??³q'
-    speed_test_cn '4751' "¥_¨Ê?«H"
-    speed_test_cn '5145' '¥_¨Ê?³q'
-    speed_test_cn '6132' '´ò«n?«H'
-
+    speed_test_cn '12637' 'è¥„é˜³ç”µä¿¡'
+    speed_test_cn '3633' 'ä¸Šæµ·ç”µä¿¡'
+    speed_test_cn '4624' 'æˆéƒ½ç”µä¿¡'
+    speed_test_cn '4863' "è¥¿å®‰ç”µä¿¡"
+    speed_test_cn '5083' 'ä¸Šæµ·è”é€š'
+    speed_test_cn '5726' 'é‡åº†è”é€š'
+    speed_test_cn '4751' "åŒ—äº¬ç”µä¿¡"
+    speed_test_cn '5145' 'åŒ—äº¬è”é€š'
+    speed_test_cn '6132' 'æ¹–å—ç”µä¿¡'
     rm -rf /tmp/speedtest.py
 }
-
-
 io_test() {
     (LANG=C dd if=/dev/zero of=test_$$ bs=64k count=16k conv=fdatasync && rm -f test_$$ ) 2>&1 | awk -F, '{io=$NF} END { print io}' | sed 's/^[ \t]*//;s/[ \t]*$//'
 }
-
 calc_disk() {
     local total_size=0
     local array=$@
@@ -269,7 +257,6 @@ calc_disk() {
     done
     echo ${total_size}
 }
-
 cname=$( awk -F: '/model name/ {name=$2} END {print name}' /proc/cpuinfo | sed 's/^[ \t]*//;s/[ \t]*$//' )
 cores=$( awk -F: '/model name/ {core++} END {print core}' /proc/cpuinfo )
 freq=$( awk -F: '/cpu MHz/ {freq=$2} END {print freq}' /proc/cpuinfo | sed 's/^[ \t]*//;s/[ \t]*$//' )
@@ -288,67 +275,59 @@ disk_size1=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot
 disk_size2=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $3}' ))
 disk_total_size=$( calc_disk ${disk_size1[@]} )
 disk_used_size=$( calc_disk ${disk_size2[@]} )
-
-
 clear
 next
-echo -e "CPU «¬?             : ${SKYBLUE}$cname${PLAIN}"
-echo -e "CPU ®Ö¤ß?           : ${SKYBLUE}$cores${PLAIN}"
-echo -e "CPU ?²v             : ${SKYBLUE}$freq MHz${PLAIN}"
-echo -e "?µw?¤j¤p           : ${SKYBLUE}$disk_total_size GB ($disk_used_size GB Used)${PLAIN}"
-echo -e "??¦s¤j¤p           : ${SKYBLUE}$tram MB ($uram MB Used)${PLAIN}"
-echo -e "SWAP¤j¤p             : ${SKYBLUE}$swap MB ($uswap MB Used)${PLAIN}"
-echo -e "?Éó??             : ${SKYBLUE}$up${PLAIN}"
-echo -e "¨t???             : ${SKYBLUE}$load${PLAIN}"
-echo -e "¨t?                 : ${SKYBLUE}$opsy${PLAIN}"
-echo -e "¬[ÌÛ                 : ${SKYBLUE}$arch ($lbit Bit)${PLAIN}"
-echo -e "?®Ö                 : ${SKYBLUE}$kern${PLAIN}"
-echo -ne "??¤Æ¥­¥x           : "
+echo -e "CPU å‹å·             : ${SKYBLUE}$cname${PLAIN}"
+echo -e "CPU æ ¸å¿ƒæ•°           : ${SKYBLUE}$cores${PLAIN}"
+echo -e "CPU é¢‘ç‡             : ${SKYBLUE}$freq MHz${PLAIN}"
+echo -e "æ€»ç¡¬ç›˜å¤§å°           : ${SKYBLUE}$disk_total_size GB ($disk_used_size GB Used)${PLAIN}"
+echo -e "æ€»å†…å­˜å¤§å°           : ${SKYBLUE}$tram MB ($uram MB Used)${PLAIN}"
+echo -e "SWAPå¤§å°             : ${SKYBLUE}$swap MB ($uswap MB Used)${PLAIN}"
+echo -e "å¼€æœºæ—¶é•¿             : ${SKYBLUE}$up${PLAIN}"
+echo -e "ç³»ç»Ÿè´Ÿè½½             : ${SKYBLUE}$load${PLAIN}"
+echo -e "ç³»ç»Ÿ                 : ${SKYBLUE}$opsy${PLAIN}"
+echo -e "æ¶æ„                 : ${SKYBLUE}$arch ($lbit Bit)${PLAIN}"
+echo -e "å†…æ ¸                 : ${SKYBLUE}$kern${PLAIN}"
+echo -ne "è™šæ‹ŸåŒ–å¹³å°           : "
 virtua=$(virt-what) 2>/dev/null
-
 if [[ ${virtua} ]]; then
     echo -e "${SKYBLUE}$virtua${PLAIN}"
 else
     echo -e "${SKYBLUE}No Virt${PLAIN}"
 fi
-
-
 next
 io1=$( io_test )
-echo -e "µw?I/O (²Ä¤@¦¸??) : ${YELLOW}$io1${PLAIN}"
+echo -e "ç¡¬ç›˜I/O (ç¬¬ä¸€æ¬¡æµ‹è¯•) : ${YELLOW}$io1${PLAIN}"
 io2=$( io_test )
-echo -e "µw?I/O (²Ä¤G¦¸??) : ${YELLOW}$io2${PLAIN}"
+echo -e "ç¡¬ç›˜I/O (ç¬¬äºŒæ¬¡æµ‹è¯•) : ${YELLOW}$io2${PLAIN}"
 io3=$( io_test )
-echo -e "µw?I/O (²Ä¤T¦¸??) : ${YELLOW}$io3${PLAIN}"
+echo -e "ç¡¬ç›˜I/O (ç¬¬ä¸‰æ¬¡æµ‹è¯•) : ${YELLOW}$io3${PLAIN}"
 next
-
 ##Record All Test data
 rm -rf /tmp/info.txt
 touch /tmp/info.txt
 echo $cname >> /tmp/info.txt
 echo $cores >> /tmp/info.txt
 echo $freq MHz >> /tmp/info.txt
-echo "$disk_total_size GB ($disk_used_size GB ¤w¨Ï¥Î) ">> /tmp/info.txt
-echo "$tram MB ($uram MB ¤w¨Ï¥Î) ">> /tmp/info.txt
-echo "$swap MB ($uswap MB ¤w¨Ï¥Î)" >> /tmp/info.txt
+echo "$disk_total_size GB ($disk_used_size GB å·²ä½¿ç”¨) ">> /tmp/info.txt
+echo "$tram MB ($uram MB å·²ä½¿ç”¨) ">> /tmp/info.txt
+echo "$swap MB ($uswap MB å·²ä½¿ç”¨)" >> /tmp/info.txt
 echo $up >> /tmp/info.txt
 echo $load >> /tmp/info.txt
 echo $opsy >> /tmp/info.txt
-echo "$arch ($lbit ¦ì) ">> /tmp/info.txt
+echo "$arch ($lbit ä½) ">> /tmp/info.txt
 echo $kern >> /tmp/info.txt
 echo $virtua >> /tmp/info.txt
 echo $io1 >> /tmp/info.txt
 echo $io2 >> /tmp/info.txt
 echo $io3 >> /tmp/info.txt
 AKEY=$( uuid )
-
-printf "%-30s%-20s%-24s%-12s\n" "??¦W?" "IP¦a§}" "¤U?³t«×" "©µ?"
+printf "%-30s%-20s%-24s%-12s\n" "èŠ‚ç‚¹åç§°" "IPåœ°å€" "ä¸‹è½½é€Ÿåº¦" "å»¶è¿Ÿ"
 speed && next
-printf "%-30s%-22s%-24s%-12s\n" "??¦W?" "¤W?³t«×" "¤U?³t«×" "©µ?"
+printf "%-30s%-22s%-24s%-12s\n" "èŠ‚ç‚¹åç§°" "ä¸Šä¼ é€Ÿåº¦" "ä¸‹è½½é€Ÿåº¦" "å»¶è¿Ÿ"
 speed_cn && next
 python /tmp/ZPing-CN.py
 next
-
 NetCFspeec=$( sed -n "2p" /tmp/speed.txt )
 NetCFping=$( sed -n "3p" /tmp/speed.txt )
 NetLJPspeed=$( sed -n "5p" /tmp/speed.txt )
@@ -371,8 +350,6 @@ NetSSGspeed=$( sed -n "29p" /tmp/speed.txt )
 NetSSGping=$( sed -n "30p" /tmp/speed.txt )
 NetSCNspeed=$( sed -n "32p" /tmp/speed.txt )
 NetSCNping=$( sed -n "33p" /tmp/speed.txt )
-
-
 NetUPST=$( sed -n "4p" /tmp/speed_cn.txt )
 NetDWST=$( sed -n "5p" /tmp/speed_cn.txt )
 NetPiST=$( sed -n "6p" /tmp/speed_cn.txt )
@@ -397,8 +374,6 @@ NetPiSM=$( sed -n "24p" /tmp/speed_cn.txt )
 NetUPCM=$( sed -n "25p" /tmp/speed_cn.txt )
 NetDWCM=$( sed -n "26p" /tmp/speed_cn.txt )
 NetPiCM=$( sed -n "27p" /tmp/speed_cn.txt )
-
-
 wget -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/ZBench/master/Generate.py >> /dev/null 2>&1
 python Generate.py && rm -rf Generate.py && cp /root/report.html /tmp/report/index.html
 TSM=$( cat /tmp/shm.txt_table )
@@ -407,25 +382,23 @@ TSU=$( cat /tmp/shu.txt_table )
 TGM=$( cat /tmp/gdm.txt_table )
 TGT=$( cat /tmp/gdt.txt_table )
 TGU=$( cat /tmp/gdu.txt_table )
-curl 'http://api.zbench.kirito.moe/action.php' --data "CPUmodel=$cname &CPUspeed=$freq MHz &CPUcore=$cores &HDDsize=$disk_total_size GB ($disk_used_size GB ¤w¨Ï¥Î) &RAMsize=$tram MB ($uram MB ¤w¨Ï¥Î)&SWAPsize=$swap MB ($uswap MB ¤w¨Ï¥Î)&UPtime= $up&Arch=1&systemload=$load&OS= $opsy &Arch=$arch ($lbit ¦ì)&Kernel=$kern &Virmethod=$virtua &IOa=$io1&IOb=$io2&IOc=$io3&NetCFspeec=$NetCFspeec&NetCFping=$NetCFping&NetLJPspeed=$NetLJPspeed&NetLJPping=$NetLJPping&NetLSGspeed=$NetLSGspeed&NetLSGping=$NetLSGping&NetLUKspeed=$NetLUKspeed&NetLUKping=$NetLUKping&NetLDEspeed=$NetLDEspeed&NetLDEping=$NetLDEping&NetLCAspeed=$NetLCAspeed&NetLCAping=$NetLCAping&NetSTXspeed=$NetSTXspeed&NetSTXping=$NetSTXping&NetSWAspeed=$NetSWAspeed&NetSWAping=$NetSWAping&NetSDEspeed=$NetSDEspeed&NetSDEping=$NetSDEping&NetSSGspeed=$NetSSGspeed&NetSSGping=$NetSSGping&NetSCNspeed=$NetSCNspeed&NetSCNping=$NetSCNping&NetUPST=$NetUPST&NetDWST=$NetDWST&NetPiST=$NetPiST&NetUPCT=$NetUPCT&NetDWCT=$NetDWCT&NetPiCT=$NetPiCT&NetUPXT=$NetUPXT&NetDWXT=$NetDWXT&NetPiXT=$NetPiXT&NetUPSU=$NetUPSU&NetDWSU=$NetDWSU&NetPiSU=$NetPiSU&NetUPCU=$NetUPCU&NetDWCU=$NetDWCU&NetPiCU=$NetPiCU&NetUPXM=$NetUPXM&NetDWXM=$NetDWXM&NetPiXM=$NetPiXM&NetUPSM=$NetUPSM&NetDWSM=$NetDWSM&NetPiSM=$NetPiSM&NetUPCM=$NetUPCM&NetDWCM=$NetDWCM&NetPiCM=$NetPiCM&TSM=$TSM&TST=$TST&TSU=$TSU&TGM=$TGM&TGT=$TGT&TGU=$TGU&AKEY=$AKEY&Provider=$Provider"
+curl 'http://api.zbench.kirito.moe/action.php' --data "CPUmodel=$cname &CPUspeed=$freq MHz &CPUcore=$cores &HDDsize=$disk_total_size GB ($disk_used_size GB å·²ä½¿ç”¨) &RAMsize=$tram MB ($uram MB å·²ä½¿ç”¨)&SWAPsize=$swap MB ($uswap MB å·²ä½¿ç”¨)&UPtime= $up&Arch=1&systemload=$load&OS= $opsy &Arch=$arch ($lbit ä½)&Kernel=$kern &Virmethod=$virtua &IOa=$io1&IOb=$io2&IOc=$io3&NetCFspeec=$NetCFspeec&NetCFping=$NetCFping&NetLJPspeed=$NetLJPspeed&NetLJPping=$NetLJPping&NetLSGspeed=$NetLSGspeed&NetLSGping=$NetLSGping&NetLUKspeed=$NetLUKspeed&NetLUKping=$NetLUKping&NetLDEspeed=$NetLDEspeed&NetLDEping=$NetLDEping&NetLCAspeed=$NetLCAspeed&NetLCAping=$NetLCAping&NetSTXspeed=$NetSTXspeed&NetSTXping=$NetSTXping&NetSWAspeed=$NetSWAspeed&NetSWAping=$NetSWAping&NetSDEspeed=$NetSDEspeed&NetSDEping=$NetSDEping&NetSSGspeed=$NetSSGspeed&NetSSGping=$NetSSGping&NetSCNspeed=$NetSCNspeed&NetSCNping=$NetSCNping&NetUPST=$NetUPST&NetDWST=$NetDWST&NetPiST=$NetPiST&NetUPCT=$NetUPCT&NetDWCT=$NetDWCT&NetPiCT=$NetPiCT&NetUPXT=$NetUPXT&NetDWXT=$NetDWXT&NetPiXT=$NetPiXT&NetUPSU=$NetUPSU&NetDWSU=$NetDWSU&NetPiSU=$NetPiSU&NetUPCU=$NetUPCU&NetDWCU=$NetDWCU&NetPiCU=$NetPiCU&NetUPXM=$NetUPXM&NetDWXM=$NetDWXM&NetPiXM=$NetPiXM&NetUPSM=$NetUPSM&NetDWSM=$NetDWSM&NetPiSM=$NetPiSM&NetUPCM=$NetUPCM&NetDWCM=$NetDWCM&NetPiCM=$NetPiCM&TSM=$TSM&TST=$TST&TSU=$TSU&TGM=$TGM&TGT=$TGT&TGU=$TGU&AKEY=$AKEY&Provider=$Provider"
 IKEY=$(curl "http://api.zbench.kirito.moe/getkey.php?AKEY=$AKEY" 2>/dev/null)
-echo "¦b?¬d¬İ???§i¡Ghttps://zbench.kirito.moe/record-cn.php?IKEY=$IKEY"
-echo "±zªº???§i¤w«O¦s¦b /root/report.html"
-
+echo "åœ¨çº¿æŸ¥çœ‹æµ‹è¯„æŠ¥å‘Šï¼šhttps://zbench.kirito.moe/record-cn.php?IKEY=$IKEY"
+echo "æ‚¨çš„æµ‹è¯„æŠ¥å‘Šå·²ä¿å­˜åœ¨ /root/report.html"
 # If use simple http server
 while :; do echo
-  read -p "§A·Q?¦b¬d¬İ±zªº???§i?? [y/n]: " ifreport
+  read -p "ä½ æƒ³ç°åœ¨æŸ¥çœ‹æ‚¨çš„æµ‹è¯„æŠ¥å‘Šå—? [y/n]: " ifreport
   if [[ ! $ifreport =~ ^[y,n]$ ]]; then
-    echo "?¤J??! ?ÚÌ«O§A?¤Jªº¬O 'y' ©ÎªÌ 'n'"
+    echo "è¾“å…¥é”™è¯¯! è¯·ç¡®ä¿ä½ è¾“å…¥çš„æ˜¯ 'y' æˆ–è€… 'n'"
   else
     break
   fi
 done
-
 if [[ $ifreport == 'y' ]];then
     echo ""
     myip=`curl -m 10 -s http://members.3322.org/dyndns/getip`
-    echo "?? http://${myip}:8001/index.html ¬d¬İ±zªº???§i¡A«ö Ctrl + C °h¥X"
+    echo "è®¿é—® http://${myip}:8001/index.html æŸ¥çœ‹æ‚¨çš„æµ‹è¯•æŠ¥å‘Šï¼ŒæŒ‰ Ctrl + C é€€å‡º"
 	cd /tmp/report
     python -m SimpleHTTPServer 8001
     iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 8001 -j ACCEPT
